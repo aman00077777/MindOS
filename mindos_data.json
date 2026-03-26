@@ -19,8 +19,28 @@
             },
             "action": "Took Penalty",
             "timestamp": "2026-03-26T14:11:33.013168"
+        },
+        {
+            "thought": "i don't want to study right now.",
+            "analysis": {
+                "thought": "i don't want to study right now.",
+                "keywords_detected": [
+                    "don't"
+                ],
+                "is_negative": true,
+                "questions": [
+                    "Are you resisting because it's difficult, or because you lack discipline?"
+                ]
+            },
+            "simulation": {
+                "short_term": "Temporary relief from anxiety or effort.",
+                "long_term": "Increased future stress, lowered self-esteem, compounding difficulty of the task.",
+                "impact": "NEGATIVE - You are borrowing peace from tomorrow."
+            },
+            "action": "Took Action",
+            "timestamp": "2026-03-26T14:17:48.829835"
         }
     ],
-    "streak": 0,
-    "difficulty_modifier": 1.5
+    "streak": 1,
+    "difficulty_modifier": 1.0
 }
