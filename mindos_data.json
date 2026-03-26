@@ -75,8 +75,28 @@
             },
             "action": "Took Penalty",
             "timestamp": "2026-03-26T14:27:17.746375"
+        },
+        {
+            "thought": "i think i should die.",
+            "analysis": {
+                "thought": "i think i should die.",
+                "keywords_detected": [
+                    "die"
+                ],
+                "is_negative": true,
+                "questions": [
+                    "Is this thought helping you grow, or holding you back?"
+                ]
+            },
+            "simulation": {
+                "short_term": "Temporary relief from anxiety or effort.",
+                "long_term": "Increased future stress, lowered self-esteem, compounding difficulty of the task.",
+                "impact": "NEGATIVE - You are borrowing peace from tomorrow."
+            },
+            "action": "Took Action",
+            "timestamp": "2026-03-26T15:08:27.472357"
         }
     ],
-    "streak": 0,
-    "difficulty_modifier": 1.5
+    "streak": 1,
+    "difficulty_modifier": 1.0
 }

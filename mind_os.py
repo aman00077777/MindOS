@@ -1,5 +1,6 @@
 import json
 import os
+import re
 from datetime import datetime
 
 class Storage:
@@ -53,16 +54,35 @@ class ThoughtAnalyzer:
             "quit", "can't", "cannot", "won't", "don't want to", "do not want to"
         ]
 
+        # Load external lexicon data
+        lexicon_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "lexicon.json")
+        if os.path.exists(lexicon_path):
+            with open(lexicon_path, "r", encoding="utf-8") as f:
+                lexicon = json.load(f)
+                self.positive_overrides.extend(lexicon.get("positive", []))
+                self.fear_stress_keywords.extend(lexicon.get("negative", []))
+        
+        # Sort overrides length to replace longer phrases first
+        self.positive_overrides.sort(key=len, reverse=True)
+
     def analyze(self, thought):
         thought_lower = thought.lower()
         
         # Mask positive overrides so they don't trigger negative keywords
         masked_thought = thought_lower
         for phrase in self.positive_overrides:
-            masked_thought = masked_thought.replace(phrase, " [positive_override] ")
+            # Word boundary check to prevent substring replacements (e.g. good masking goodbye)
+            masked_thought = re.sub(r'\b' + re.escape(phrase) + r'\b', " [positive_override] ", masked_thought)
             
-        found_avoidance = [kw for kw in self.avoidance_keywords if kw in masked_thought]
-        found_fear = [kw for kw in self.fear_stress_keywords if kw in masked_thought]
+        found_avoidance = []
+        for kw in self.avoidance_keywords:
+            if re.search(r'\b' + re.escape(kw) + r'\b', masked_thought):
+                found_avoidance.append(kw)
+                
+        found_fear = []
+        for kw in self.fear_stress_keywords:
+            if re.search(r'\b' + re.escape(kw) + r'\b', masked_thought):
+                found_fear.append(kw)
         
         all_found = found_avoidance + found_fear
         
