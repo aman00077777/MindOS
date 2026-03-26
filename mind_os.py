@@ -31,37 +31,63 @@ class Storage:
 class ThoughtAnalyzer:
     """Analyzes user thoughts for negative patterns."""
     def __init__(self):
-        self.negative_keywords = [
-            "lazy", "fear", "avoid", "stress", "quit", "give up", 
-            "tired", "hard", "don't", "do not", "can't", "cannot", "won't"
+        # Phrases that indicate positive intent despite containing negative words
+        self.positive_overrides = [
+            "don't quit", "won't quit", "not quitting", "never quit",
+            "don't give up", "won't give up", "never give up", "not giving up",
+            "not afraid", "not skipping", "won't skip", "not lazy",
+            "not tired", "don't avoid", "not avoiding", "won't stop",
+            "don't stop", "not stopping"
+        ]
+        
+        # Words indicating avoidance/delay
+        self.avoidance_keywords = [
+            "skip", "skipping", "delay", "postpone", "procrastinate", 
+            "tomorrow", "later", "avoid", "avoiding", "not feeling like"
+        ]
+        
+        # Words indicating fear/stress/weakness/negativity
+        self.fear_stress_keywords = [
+            "fear", "scared", "stress", "anxious", "overwhelmed", "hard", 
+            "difficult", "too much", "lazy", "tired", "exhausted", "give up", 
+            "quit", "can't", "cannot", "won't", "don't want to", "do not want to"
         ]
 
     def analyze(self, thought):
         thought_lower = thought.lower()
-        found_keywords = [kw for kw in self.negative_keywords if kw in thought_lower]
+        
+        # Mask positive overrides so they don't trigger negative keywords
+        masked_thought = thought_lower
+        for phrase in self.positive_overrides:
+            masked_thought = masked_thought.replace(phrase, " [positive_override] ")
+            
+        found_avoidance = [kw for kw in self.avoidance_keywords if kw in masked_thought]
+        found_fear = [kw for kw in self.fear_stress_keywords if kw in masked_thought]
+        
+        all_found = found_avoidance + found_fear
         
         analysis = {
             "thought": thought,
-            "keywords_detected": found_keywords,
-            "is_negative": len(found_keywords) > 0,
+            "keywords_detected": list(set(all_found)),
+            "is_negative": len(all_found) > 0,
             "questions": []
         }
         
         if analysis["is_negative"]:
-            if any(k in found_keywords for k in ["avoid", "fear"]):
+            if found_avoidance:
                 analysis["questions"].extend([
-                    "Why are you avoiding this? What is the root fear?",
-                    "Is the outcome of this in your control?"
+                    "Are you delaying this out of genuine necessity, or are you just avoiding the effort?",
+                    "What happens if you keep pushing this to another time?"
                 ])
-            elif any(k in found_keywords for k in ["lazy", "tired", "hard"]):
-                analysis["questions"].append("Are you actually physically exhausted, or just resisting the effort?")
-            elif any(k in found_keywords for k in ["don't", "do not", "can't", "cannot", "won't", "quit", "give up"]):
-                analysis["questions"].append("Are you resisting because it's difficult, or because you lack discipline?")
-            elif "stress" in found_keywords:
+            elif any(k in found_fear for k in ["fear", "scared", "stress", "anxious", "overwhelmed"]):
                 analysis["questions"].extend([
                     "What is the worst that could happen?",
                     "Is the stress coming from lack of preparation?"
                 ])
+            elif any(k in found_fear for k in ["lazy", "tired", "exhausted", "hard", "difficult"]):
+                analysis["questions"].append("Are you actually physically exhausted, or just resisting the mental effort?")
+            elif any(k in found_fear for k in ["can't", "cannot", "won't", "don't want to", "do not want to", "give up", "quit"]):
+                analysis["questions"].append("Are you resisting because it's difficult, or because you lack discipline?")
             else:
                 analysis["questions"].append("Is this thought helping you grow, or holding you back?")
         return analysis

@@ -39,8 +39,44 @@
             },
             "action": "Took Action",
             "timestamp": "2026-03-26T14:17:48.829835"
+        },
+        {
+            "thought": "i won't give up on gym",
+            "analysis": {
+                "thought": "i won't give up on gym",
+                "keywords_detected": [],
+                "is_negative": false,
+                "questions": []
+            },
+            "simulation": {
+                "short_term": "Immediate discomfort and expenditure of energy.",
+                "long_term": "Task completion, skill growth, improved self-respect.",
+                "impact": "POSITIVE - You are investing in your future self."
+            },
+            "action": "Took Action",
+            "timestamp": "2026-03-26T14:26:48.151692"
+        },
+        {
+            "thought": "i do not want to study",
+            "analysis": {
+                "thought": "i do not want to study",
+                "keywords_detected": [
+                    "do not want to"
+                ],
+                "is_negative": true,
+                "questions": [
+                    "Are you resisting because it's difficult, or because you lack discipline?"
+                ]
+            },
+            "simulation": {
+                "short_term": "Temporary relief from anxiety or effort.",
+                "long_term": "Increased future stress, lowered self-esteem, compounding difficulty of the task.",
+                "impact": "NEGATIVE - You are borrowing peace from tomorrow."
+            },
+            "action": "Took Penalty",
+            "timestamp": "2026-03-26T14:27:17.746375"
         }
     ],
-    "streak": 1,
-    "difficulty_modifier": 1.0
+    "streak": 0,
+    "difficulty_modifier": 1.5
 }
